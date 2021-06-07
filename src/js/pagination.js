@@ -16,6 +16,7 @@ const reNum = () => {
 dec.addEventListener("click", () => {
   if (pageNum - 1 > 0) pageNum -= 1;
 //   value.textContent = pageNum;
+console.log(pageNum);
 
   if (pageNum === 1) {
     s1.classList.add("accent");
@@ -48,6 +49,8 @@ dec.addEventListener("click", () => {
 inc.addEventListener("click", () => {
   if(pageNum<maxPage)pageNum += 1;
 //   value.textContent = pageNum;
+console.log(pageNum);
+
 
   if (pageNum === 2) {
     s1.classList.toggle("accent");
