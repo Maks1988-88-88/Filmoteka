@@ -1,17 +1,17 @@
 import cardTpl from '../templates/card-template.hbs';
-import fetchApiFilms from './js/apiService.js';
+import FetchApiFilms from './apiService';
 
-const fetchApiFilms = new fetchApiFilms();
+const fetchApiFilms = new FetchApiFilms();
 
 const refs = {
-  gallery: document.querySelector('#js-gallery'),
+  gallery: document.querySelector('.js-gallery'),
 };
 
 //рендер популярных фильмов
 function createPopularMoviesGallery() {
-  fetchApiFilms.fetchPopularMovies().then(makeGalleryMarkup).сatch(console.log); // переписать сatch, выводим ошибку или нотификашку?
+  return fetchApiFilms.fetchPopularMovies().then(makeGalleryMarkup); // переписать сatch, выводим ошибку или нотификашку?
 }
-
+createPopularMoviesGallery();
 //рендер по результату поиска фильмов
 function createMoviesGallery() {
   fetchApiFilms
@@ -20,7 +20,7 @@ function createMoviesGallery() {
       if (movies.length === 0) {
         console.log('no matches');
       } else {
-        makeGalleryMarkup(movies);
+        makeGalleryMarkup(movies); 
       }
     })
     .сatch(console.log); // переписать сatch, выводим ошибку или нотификашку?
