@@ -1,73 +1,100 @@
-// console.log('pagination.shu');
-let pageNum = 1;
-let maxPage = 10;
-s1.classList.toggle("accent");
+import { fetchFilms, createPopularMoviesGallery } from './gallery.js';
+let pageNum = 1;  // let visPage = 5;
 
-const reNum = () => {
+fetchFilms
+  .fetchPopularMoviesMaxPage()
+  .then(r => (fetchFilms.maxPageNum = r.total_results))
+  .catch(err => console.log(err));
+
+l1.classList.toggle('pag_acc');
+
+const scrollNum = () => {
+  if (fetchFilms.maxPageNum - pageNum === 1) {
+    s1.textContent = pageNum - 3;
+    s2.textContent = pageNum - 2;
+    s3.textContent = pageNum - 1;
+    s4.textContent = pageNum;
+    s5.textContent = pageNum + 1;
+    return;
+  }
+  if (pageNum === 1) {
+    s1.textContent = pageNum;
+    s2.textContent = pageNum + 1;
+    s3.textContent = pageNum + 2;
+    s4.textContent = pageNum + 3;
+    s5.textContent = pageNum + 4;
+    return;
+  }
+  if (pageNum === 2) {
+    s1.textContent = pageNum - 1;
+    s2.textContent = pageNum;
+    s3.textContent = pageNum + 1;
+    s4.textContent = pageNum + 2;
+    s5.textContent = pageNum + 3;
+    return;
+  }
+  if (fetchFilms.maxPageNum === pageNum) return;
+
   s1.textContent = pageNum - 2;
   s2.textContent = pageNum - 1;
   s3.textContent = pageNum;
   s4.textContent = pageNum + 1;
   s5.textContent = pageNum + 2;
+};
 
-  s3.classList.add("accent");
+const accenting = () => {
+  document.querySelector('.pag_acc').classList.toggle('pag_acc');
+
+  if (pageNum === 1) return l1.classList.add('pag_acc');
+  if (pageNum === 2) return l2.classList.toggle('pag_acc');
+  if (pageNum === fetchFilms.maxPageNum - 1)
+    return l4.classList.toggle('pag_acc');
+  if (pageNum === fetchFilms.maxPageNum) return l5.classList.add('pag_acc');
+
+  l3.classList.add('pag_acc');
+};
+// changePageNumAndReDraw
+const cPNARD = () => {
+  fetchFilms.pageNum = pageNum;
+
+  document.querySelector('.js-gallery').innerHTML = '';
+  createPopularMoviesGallery();
+  scrollNum();
+  accenting();
+  // console.log(fetchFilms.pageNum); // to DEL after tune
 };
 // ============= listeners ==================
-dec.addEventListener("click", () => {
-  if (pageNum - 1 > 0) pageNum -= 1;
-//   value.textContent = pageNum;
-console.log(pageNum);
+dec.addEventListener('click', () => {
+  if (pageNum <= 1) return;
+  pageNum -= 1;
 
-  if (pageNum === 1) {
-    s1.classList.add("accent");
-    s2.classList.remove("accent");
-    return;
-  }
-
-  if (pageNum === 2) {
-    s2.classList.toggle("accent");
-    s3.classList.toggle("accent");
-    return;
-  }
-
-  if (pageNum === maxPage-1) {
-    s4.classList.toggle("accent");
-    s5.classList.toggle("accent");
-    return;
-  }
-
-  if (pageNum === maxPage-2) {
-    s3.classList.toggle("accent");
-    s4.classList.toggle("accent");
-    return;
-  }
-
-  if(pageNum+2<maxPage)reNum();
-  
+  cPNARD();
 });
 
-inc.addEventListener("click", () => {
-  if(pageNum<maxPage)pageNum += 1;
-//   value.textContent = pageNum;
-console.log(pageNum);
+inc.addEventListener('click', () => {
+  if (pageNum + 1 >= fetchFilms.maxPageNum) return;
 
+  pageNum += 1;
 
-  if (pageNum === 2) {
-    s1.classList.toggle("accent");
-    s2.classList.toggle("accent");
-  }
-
-  if (pageNum === maxPage-1) {
-    s3.classList.toggle("accent");
-    s4.classList.toggle("accent");
-  }
-
-  if (pageNum === maxPage) {
-    s4.classList.remove("accent");
-    s5.classList.add("accent");
-  }
-
-  if (pageNum === 3) s2.classList.toggle("accent");
-
-  if ((pageNum > 2)&&(pageNum+2<=maxPage)) reNum();
+  cPNARD();
 });
+
+document.querySelectorAll('.pag_item').forEach(el => {
+  el.addEventListener('click', click => {
+    if (pageNum === +click.currentTarget.innerText) return;
+    pageNum = +click.currentTarget.innerText;
+
+    cPNARD();
+  });
+});
+
+// тень под правой стрелкой
+// filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))
+// transform: matrix(-1, 0, 0, 1, 0, 0);
+
+// m 20-40-19-[]-16-[]-17-40-16-[]-16-[]-20-40-20
+// t 197-40-16-[7]-16-.1.1.-16-[]-16-[]-17-40-16-[]-16-[]-16-.1.1.-16-[]-10-40-197
+
+// =>20-40-20-[]-16-[]-16-40-16-[]-16-[]-20-40-20
+// ========================================
+// window.onload = () => {};
