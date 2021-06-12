@@ -1,34 +1,15 @@
-// светлосерый под стрелкой - F7F7F7
-// accent - FF6B08 (background: rgba(255, 107, 8, 1))
+import { fetchFilms, createPopularMoviesGallery } from './gallery.js';
+let pageNum = 1;  // let visPage = 5;
 
-// тень над правой стрелкой в mobile:
-// filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-// transform: matrix(-1, 0, 0, 1, 0, 0);
+fetchFilms
+  .fetchPopularMoviesMaxPage()
+  .then(r => (fetchFilms.maxPageNum = r.total_results))
+  .catch(err => console.log(err));
 
-// 40x40 знакоместо под акцентированный номер страницы и фон стрелки
-// 5 - радиус скруглений этих фонов
-
-// font-family: Roboto;
-// font-style: normal;
-// font-weight: 500;
-// font-size: 12px;
-// line-height: 16px;/* identical to box height, or 133% */
-// display: flex;
-// align-items: center;
-// color: #000000;
-
-// m 20-40-19-[]-16-[]-17-40-16-[]-16-[]-20-40-20
-// t 197-40-16-[7]-16-.1.1.-16-[]-16-[]-17-40-16-[]-16-[]-16-.1.1.-16-[]-10-40-197
-
-// =>20-40-20-[]-16-[]-16-40-16-[]-16-[]-20-40-20
-
-let pageNum = 1;
-const maxPage = 10;
-// let visPage = 5;
-l1.classList.toggle("pag_acc");
+l1.classList.toggle('pag_acc');
 
 const scrollNum = () => {
-  if (maxPage - pageNum === 1) {
+  if (fetchFilms.maxPageNum - pageNum === 1) {
     s1.textContent = pageNum - 3;
     s2.textContent = pageNum - 2;
     s3.textContent = pageNum - 1;
@@ -36,7 +17,6 @@ const scrollNum = () => {
     s5.textContent = pageNum + 1;
     return;
   }
-
   if (pageNum === 1) {
     s1.textContent = pageNum;
     s2.textContent = pageNum + 1;
@@ -45,7 +25,6 @@ const scrollNum = () => {
     s5.textContent = pageNum + 4;
     return;
   }
-
   if (pageNum === 2) {
     s1.textContent = pageNum - 1;
     s2.textContent = pageNum;
@@ -54,8 +33,7 @@ const scrollNum = () => {
     s5.textContent = pageNum + 3;
     return;
   }
-
-  if (maxPage === pageNum) return;
+  if (fetchFilms.maxPageNum === pageNum) return;
 
   s1.textContent = pageNum - 2;
   s2.textContent = pageNum - 1;
@@ -65,76 +43,58 @@ const scrollNum = () => {
 };
 
 const accenting = () => {
-  // value.textContent = pageNum; // убрать после отладки
-  document.querySelector(".pag_acc").classList.toggle("pag_acc");
+  document.querySelector('.pag_acc').classList.toggle('pag_acc');
 
-  if (pageNum === 1) return l1.classList.add("pag_acc");
-  if (pageNum === 2) return l2.classList.toggle("pag_acc");
-  if (pageNum === maxPage - 1) return l4.classList.toggle("pag_acc");
-  if (pageNum === maxPage) return l5.classList.add("pag_acc");
+  if (pageNum === 1) return l1.classList.add('pag_acc');
+  if (pageNum === 2) return l2.classList.toggle('pag_acc');
+  if (pageNum === fetchFilms.maxPageNum - 1)
+    return l4.classList.toggle('pag_acc');
+  if (pageNum === fetchFilms.maxPageNum) return l5.classList.add('pag_acc');
 
-  l3.classList.add("pag_acc");
+  l3.classList.add('pag_acc');
 };
-// temporary. maybee del after rename
-const scrollNumIfNeed = () => {
-  // if (pageNum > 2 && pageNum + 2 <= maxPage) scrollNum();
-  // if (pageNum > 2 && pageNum + 2 <= maxPage) scrollNum();
-  // if (pageNum > 2)
+// changePageNumAndReDraw
+const cPNARD = () => {
+  fetchFilms.pageNum = pageNum;
+
+  document.querySelector('.js-gallery').innerHTML = '';
+  createPopularMoviesGallery();
   scrollNum();
+  accenting();
+  // console.log(fetchFilms.pageNum); // to DEL after tune
 };
 // ============= listeners ==================
-dec.addEventListener("click", () => {
-  if (pageNum - 1 <= 0) return;
+dec.addEventListener('click', () => {
+  if (pageNum <= 1) return;
   pageNum -= 1;
 
-  scrollNumIfNeed();
-  accenting();
+  cPNARD();
 });
 
-inc.addEventListener("click", () => {
-  if (pageNum >= maxPage) return;
+inc.addEventListener('click', () => {
+  if (pageNum + 1 >= fetchFilms.maxPageNum) return;
+
   pageNum += 1;
 
-  scrollNumIfNeed();
-  accenting();
+  cPNARD();
 });
 
-l1.addEventListener("click", (click) => {
-  if (pageNum !== +click.currentTarget.innerText) {
+document.querySelectorAll('.pag_item').forEach(el => {
+  el.addEventListener('click', click => {
+    if (pageNum === +click.currentTarget.innerText) return;
     pageNum = +click.currentTarget.innerText;
-    scrollNumIfNeed();
-    accenting();
-  }
+
+    cPNARD();
+  });
 });
 
-l2.addEventListener("click", (click) => {
-  if (pageNum !== +click.currentTarget.innerText) {
-    pageNum = +click.currentTarget.innerText;
-    scrollNumIfNeed();
-    accenting();
-  }
-});
+// тень под правой стрелкой
+// filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))
+// transform: matrix(-1, 0, 0, 1, 0, 0);
 
-l3.addEventListener("click", (click) => {
-  if (pageNum !== +click.currentTarget.innerText) {
-    pageNum = +click.currentTarget.innerText;
-    scrollNumIfNeed();
-    accenting();
-  }
-});
+// m 20-40-19-[]-16-[]-17-40-16-[]-16-[]-20-40-20
+// t 197-40-16-[7]-16-.1.1.-16-[]-16-[]-17-40-16-[]-16-[]-16-.1.1.-16-[]-10-40-197
 
-l4.addEventListener("click", (click) => {
-  if (pageNum !== +click.currentTarget.innerText) {
-    pageNum = +click.currentTarget.innerText;
-    scrollNumIfNeed();
-    accenting();
-  }
-});
-
-l5.addEventListener("click", (click) => {
-  if (pageNum !== +click.currentTarget.innerText) {
-    pageNum = +click.currentTarget.innerText;
-    scrollNumIfNeed();
-    accenting();
-  }
-});
+// =>20-40-20-[]-16-[]-16-40-16-[]-16-[]-20-40-20
+// ========================================
+// window.onload = () => {};

@@ -5,7 +5,14 @@ export default class fetchApiFilms {
   constructor() {
     this.searchQuery = ''; //Ключевое слово для поиска фильма
     this.page = 1; //Текущая страница запроса на пагинаторе
+    this.maxPage = 1; // Shu
   }
+
+  fetchPopularMoviesMaxPage() {
+    return fetch(
+      `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US`,
+    ).then(response => response.json());
+  } // Shu
 
   fetchPopularMovies() {
     const url = `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=${this.page}`;
@@ -37,11 +44,22 @@ export default class fetchApiFilms {
   get pageNum() {
     return this.page;
   }
+
   set pageNum(newPage) {
     this.page = newPage;
   }
 
+  get maxPageNum() {
+    return this.maxPage;
+  }
+  
+  set maxPageNum(newPageNum) {
+    this.maxPage = newPageNum;
+  }
+
   resetPageNum() {
+    console.log('reset this.page');
+
     return (this.page = 1);
   }
 
@@ -53,9 +71,9 @@ export default class fetchApiFilms {
     this.searchQuery = newQuery;
   }
 
-  fetchFilmByID(filmId){
+  fetchFilmByID(filmId) {
     const url = `${BASE_URL}/movie/${filmId}?api_key=${API_KEY}&language=en-US`;
-    return fetch(url)
-    .then(response => response.json());
+    return fetch(url).then(response => response.json());
   }
 }
+// export { BASE_URL, API_KEY};

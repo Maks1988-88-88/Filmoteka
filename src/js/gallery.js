@@ -18,6 +18,7 @@ function onInputChange(evt) {
   clearGalleryMarkup();
 
   if (fetchFilms.query) {
+
     fetchFilms.resetPageNum();
     createMoviesGallery();
   } else {
@@ -28,6 +29,8 @@ function onInputChange(evt) {
 
 //рендер популярных фильмов
 function createPopularMoviesGallery() {
+  // console.log('CPMG',fetchFilms.pageNum);             // Shu
+
   fetchFilms
     .fetchPopularMovies()
     .then(makeGalleryMarkup)
@@ -52,11 +55,34 @@ function createMoviesGallery() {
       console.log(err);
     });
 }
-
-function makeGalleryMarkup(movies) {
+// def export Shu
+export default function makeGalleryMarkup(movies) {
   refs.gallery.insertAdjacentHTML('beforeend', cardTpl(movies));
 }
 
 function clearGalleryMarkup() {
   refs.gallery.innerHTML = '';
 }
+export {fetchFilms,createPopularMoviesGallery};
+// =============== Shu ================
+// window.onload = () => {
+  // document.querySelector('.js-gallery').innerHTML = '';
+  // clearGalleryMarkup();
+  // console.log('clear');
+// };
+
+// console.log(fetchFilms.pageNum);
+// fetchFilms.pageNum = 2;
+// console.log(fetchFilms.pageNum);
+
+// let resShu;
+// fetchFilms.fetchPopularMovies().then(res=>makeGalleryMarkup(res));
+// fetchFilms.fetchPopularMovies().then(console.log);
+
+// console.log(resShu);
+// createPopularMoviesGallery();
+
+// console.log(cardTpl); // Shu
+// export { createPopularMoviesGallery, makeGalleryMarkup }; // Shu
+// export {createPopularMoviesGallery}; // Shu
+
