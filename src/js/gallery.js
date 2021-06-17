@@ -78,7 +78,8 @@ function makeLibraryGallery(id) {
 // ----- library рендер сoxраненных фильмов
 function renderLibraryGallery(ids) {
   clearGalleryMarkup();
-  hideInfoImg();
+  hideInfoImg(); 
+  hidePagination();
   if (ids.length === 0) {
     renderEmptyGalleryMsg('You have no saved movies yet');
   }
@@ -101,5 +102,12 @@ function preventOnEnterSubmit(event) {
     return;
   }
 }
+
+// ----- pagination прячет в myLib
+function hidePagination (){
+  const paginationContainer = document.querySelector('.pagination');
+  paginationContainer.style.display = 'none';
+}
+
 
 export { fetchFilms, clearGalleryMarkup, createPopularMoviesGallery, renderLibraryGallery };

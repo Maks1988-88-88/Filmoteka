@@ -32,7 +32,7 @@
 }
 .pagination.container {
   padding-top: 10px;
-  padding-bottom: 40px;
+  // padding-bottom: 40px;
 }
 .pag_item {
   display: flex;
@@ -61,7 +61,7 @@
 @media screen and (min-width: 768px) {
   .pagination.container {
     padding-top: 40px;
-    padding-bottom: 60px;
+    // padding-bottom: 60px;
     .pag_item {
       margin: 0 8px;
     }

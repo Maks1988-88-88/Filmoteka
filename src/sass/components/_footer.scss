@@ -2,6 +2,7 @@
   .footer-section {
     display: block;
     background-color: #f7f7f7;
+    margin-top: 40px;
   }
   .footer-text-cont {
     display: flex;
@@ -209,6 +210,7 @@
 @media screen and (min-width: 768px) {
   .footer-section {
     display: flex;
+    margin-top: 60px;
   }
 
   .footer-modal {
