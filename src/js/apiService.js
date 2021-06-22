@@ -1,6 +1,9 @@
 const API_KEY = '2f8d6050c74d5f454a522d74a8cedbb8';
 const BASE_URL = 'https://api.themoviedb.org/3';
 
+const YouTube_KEY = 'AIzaSyBsjU_AyffyMHxyv2KNKiEnDPB3n0dY8XE';
+const YouTube_URL = 'https://youtube.googleapis.com/youtube/v3/search?part=snippet';
+
 export default class fetchApiFilms {
   constructor() {
     this.searchQuery = ''; //Ключевое слово для поиска фильма
@@ -96,6 +99,15 @@ export default class fetchApiFilms {
     return fetch(url).then(response => response.json());
   }
 
+  fetchTrailers(filmName) {
+      const url = `${YouTube_URL}&q=${filmName} + "trailer"&key=${YouTube_KEY}`;
+      return fetch(url)
+        .then(data => data.json())
+        .then(data => {
+          return data.items[0].id.videoId;
+        });
+    }
+
   get pageNum() {
     return this.page;
   }
@@ -113,7 +125,7 @@ export default class fetchApiFilms {
   }
 
   set maxPageNum(newPageNum) {
-    this.maxPage = newPageNum;
+    // this.maxPage = newPageNum;
   }
   // ------------- 4 paginat. end-----------
   get query() {
@@ -124,3 +136,4 @@ export default class fetchApiFilms {
     this.searchQuery = newQuery;
   }
 }
+
